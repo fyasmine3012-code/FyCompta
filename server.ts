@@ -50,13 +50,18 @@ async function callGeminiWithRetry<T>(fn: () => Promise<T>, retries = 3, delay =
 // Financial Assistant endpoint with full product context
 app.post(["/api/chat", "/.netlify/functions/api/chat", "/chat"], async (req, res) => {
   try {
-    const { message, history = [], context = {} } = req.body;
+  const { message, history = [], context = {} } = req.body;
 
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(200).json({
-        text: "مرحباً! يبدو أن مفتاح Gemini API لم يتم تكوينه بعد في خيارات المنصة (Settings > Secrets). يرجى تكوينه لمباشرة تفعيل المساعد المالي الذكي.\n\nHello! It seems the Gemini API key is not configured in the Secrets manager yet. Please configure it to enable the AI Financial Assistant."
-      });
-    }
+  console.log("AI Gateway environment check:", {
+    geminiKey: Boolean(process.env.GEMINI_API_KEY),
+    geminiBaseUrl: Boolean(process.env.GOOGLE_GEMINI_BASE_URL),
+    gatewayKey: Boolean(process.env.NETLIFY_AI_GATEWAY_KEY),
+    gatewayUrl: Boolean(process.env.NETLIFY_AI_GATEWAY_URL),
+    netlifyRuntime: Boolean(process.env.NETLIFY),
+    lambdaRuntime: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME)
+  });
+
+  if (!process.env.GEMINI_API_KEY) {
 
     // Build standard, structured context prompt supporting 3 languages fluently
     const contextPrompt = `
@@ -184,14 +189,6 @@ app.post(["/api/analyze-historical-file", "/.netlify/functions/api/analyze-histo
       }
     };
 
-    console.log("AI Gateway environment check:", {
-  geminiKey: Boolean(process.env.GEMINI_API_KEY),
-  geminiBaseUrl: Boolean(process.env.GOOGLE_GEMINI_BASE_URL),
-  gatewayKey: Boolean(process.env.NETLIFY_AI_GATEWAY_KEY),
-  gatewayUrl: Boolean(process.env.NETLIFY_AI_GATEWAY_URL),
-  netlifyRuntime: Boolean(process.env.NETLIFY),
-  lambdaRuntime: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME)
-});
     if (!process.env.GEMINI_API_KEY) {
       // If no API key, check if we have mapped columns. Make standard simulation based on user settings
       return res.json({ record: fallbackRecord });
