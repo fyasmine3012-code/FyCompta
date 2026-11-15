@@ -12,10 +12,6 @@ app.use(express.json());
 
 // Initialize Gemini Client server-side
 const ai = new GoogleGenAI({});
-    }
-  }
-});
-
 // Polyfill or auxiliary helper for exponential backoff on transient model API limits
 async function callGeminiWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   try {
