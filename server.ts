@@ -184,6 +184,14 @@ app.post(["/api/analyze-historical-file", "/.netlify/functions/api/analyze-histo
       }
     };
 
+    console.log("AI Gateway environment check:", {
+  geminiKey: Boolean(process.env.GEMINI_API_KEY),
+  geminiBaseUrl: Boolean(process.env.GOOGLE_GEMINI_BASE_URL),
+  gatewayKey: Boolean(process.env.NETLIFY_AI_GATEWAY_KEY),
+  gatewayUrl: Boolean(process.env.NETLIFY_AI_GATEWAY_URL),
+  netlifyRuntime: Boolean(process.env.NETLIFY),
+  lambdaRuntime: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME)
+});
     if (!process.env.GEMINI_API_KEY) {
       // If no API key, check if we have mapped columns. Make standard simulation based on user settings
       return res.json({ record: fallbackRecord });
