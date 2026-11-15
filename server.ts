@@ -1007,7 +1007,7 @@ Analyze and output strict JSON.`,
 
 // Vite Middleware Integration
 async function main() {
-  if (process.env.NODE_ENV !== "production") {
+ if (process.env.NODE_ENV !== "production" && !process.env.NETLIFY) {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
