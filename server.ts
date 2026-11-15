@@ -11,11 +11,7 @@ const PORT = 3000;
 app.use(express.json());
 
 // Initialize Gemini Client server-side
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "",
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
+const ai = new GoogleGenAI({});
     }
   }
 });
