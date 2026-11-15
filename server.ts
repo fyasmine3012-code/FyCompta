@@ -1027,7 +1027,7 @@ async function main() {
   });
 }
 
-if (!process.env.NETLIFY) {
+if (!process.env.NETLIFY && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
   main().catch((err) => {
     console.error("Error launching FyCompta server node:", err);
   });
