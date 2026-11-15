@@ -61,8 +61,13 @@ app.post(["/api/chat", "/.netlify/functions/api/chat", "/chat"], async (req, res
     lambdaRuntime: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME)
   });
 
-  if (!process.env.GEMINI_API_KEY) {
+if (!process.env.GEMINI_API_KEY) {
+  return res.status(200).json({
+    text: "مرحباً! يبدو أن مفتاح Gemini API لم يتم تكوينه بعد في خيارات المنصة. يرجى التحقق من إعدادات الذكاء الاصطناعي في Netlify."
+  });
+}
 
+    // Build standard, structured context prompt
     // Build standard, structured context prompt supporting 3 languages fluently
     const contextPrompt = `
 You are the Senior Financial Analyst & Cost Accounting Consultant (المستشار المحاسبي والمالي الخبير) for FyCompta.
